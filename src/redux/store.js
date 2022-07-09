@@ -1,8 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import recipesReducer from '../recipes/recipesSlice'
+import { recipesApi} from './recipesApi'
+import { setupListeners } from '@reduxjs/toolkit/query'
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
-    recipes: recipesReducer
-  }
+    [recipesApi.reducerPath]: recipesApi.reducer,
+
+  },
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware().concat(recipesApi.middleware)
 })
+
+setupListeners(store.dispatch)
